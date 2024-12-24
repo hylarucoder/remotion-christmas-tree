@@ -1,0 +1,38 @@
+{
+  "name": "remotion-christmas-tree",
+  "version": "1.0.0",
+  "description": "My Remotion video",
+  "repository": {},
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@remotion/cli": "4.0.243",
+    "@remotion/media-utils": "^4.0.243",
+    "@remotion/tailwind": "4.0.243",
+    "@remotion/zod-types": "4.0.243",
+    "@types/animejs": "^3.1.12",
+    "@types/three": "^0.171.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "remotion": "4.0.243",
+    "three": "^0.171.0",
+    "zod": "3.24.1"
+  },
+  "devDependencies": {
+    "@remotion/eslint-config": "4.0.243",
+    "@types/react": "19.0.2",
+    "@types/web": "0.0.188",
+    "eslint": "9.17.0",
+    "prettier": "3.4.2",
+    "typescript": "5.7.2"
+  },
+  "scripts": {
+    "dev": "remotion studio",
+    "build": "remotion bundle",
+    "upgrade": "remotion upgrade",
+    "lint": "eslint src --ext ts,tsx,js,jsx && tsc"
+  },
+  "sideEffects": [
+    "*.css"
+  ]
+}
