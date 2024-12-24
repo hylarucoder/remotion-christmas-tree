@@ -1,4 +1,4 @@
 # Remotion Christmas Tree
 
-https://github.com/user-attachments/assets/72e5dfe0-a772-42ff-ac29-e986eeee9071
+https://github.com/user-attachments/assets/d2851a59-0e72-45dd-9188-184fce3bdfd9
 
