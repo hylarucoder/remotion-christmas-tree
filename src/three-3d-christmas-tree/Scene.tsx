@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import { getAudioData, useAudioData, visualizeAudio, AudioData } from "@remotion/media-utils";
 import {
   useCurrentFrame,
@@ -332,52 +332,51 @@ class ThreeSceneRemotion {
   }
 }
 
-const SceneContent: React.FC = () => {
+// const SceneContent: React.FC = () => {
+
+//   // if (!audioData) {
+//   //   return null;
+//   // }
+
+// };
+
+
+
+export const ChristmasTreeScene: React.FC = () => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<ThreeSceneRemotion | null>(null);
   const music = staticFile("Jingle_Bells_by_Kevin_MacLeod.mp3");
   const audioData = useAudioData(music);
+  const [handle] = useState(() => delayRender());
 
-  useEffect(() => {
-    if (!canvasRef.current || !audioData) return;
+  const initScene = useCallback(async () => {
+    if (!canvasRef.current || sceneRef.current) return;
+    console.log("--init scene--");
 
-    const handle = delayRender('Initializing Three.js and loading audio');
-
-    const initScene = async () => {
-      try {
-        const scene = new ThreeSceneRemotion(canvasRef.current!, width, height, music);
-        await scene.initializeForRemotion();
-        sceneRef.current = scene;
-        continueRender(handle);
-      } catch (err) {
-        console.error('Failed to initialize scene:', err);
-        cancelRender(handle);
-      }
-    };
-
-    initScene();
-
-    return () => {
-      if (sceneRef.current) {
-        sceneRef.current.dispose();
-      }
-    };
-  }, [width, height, music, audioData]);
-
-  useEffect(() => {
-    if (sceneRef.current) {
-      sceneRef.current.seek(frame);
+    try {
+      const scene = new ThreeSceneRemotion(canvasRef.current!, width, height, music);
+      await scene.initializeForRemotion();
+      sceneRef.current = scene;
+      sceneRef.current.seek(0);
+      continueRender(handle);
+    } catch (err) {
+      console.error('Failed to initialize scene:', err);
+      cancelRender(handle);
     }
+  }, [width, height, music, handle, canvasRef]);
+
+  useEffect(() => {
+    initScene();
+    return () => sceneRef.current?.dispose();
+  }, [initScene]);
+
+  useEffect(() => {
+    sceneRef.current?.seek(frame);
   }, [frame]);
-
-  if (!audioData) {
-    return null;
-  }
-
   return (
-    <>
+    <AbsoluteFill className="bg-red-200">
       <canvas
         style={{
           width,
@@ -387,15 +386,9 @@ const SceneContent: React.FC = () => {
         height={height * 2}
         ref={canvasRef}
       />
-      <Audio src={music} />
-    </>
-  );
-};
-
-export const ChristmasTreeScene: React.FC = () => {
-  return (
-    <AbsoluteFill className="bg-black">
-      <SceneContent />
+      {
+        audioData && <Audio src={music} />
+      }
     </AbsoluteFill>
   );
 };
